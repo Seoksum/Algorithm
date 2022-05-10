@@ -1,0 +1,82 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+string RemoveDot(string str)
+{
+	string new_id_NoDot = "";
+
+	bool IsBeforeDot = false;
+
+	for (int i = 0; i < str.size(); i++)
+	{
+		if (IsBeforeDot && str[i] == '.')
+			continue;
+
+		//if (i == str.size() - 1 && str[i] == '.')
+		//	continue;
+
+		new_id_NoDot += str[i];
+		if (str[i] == '.')
+			IsBeforeDot = true;
+		else
+			IsBeforeDot = false;
+	}
+
+	return new_id_NoDot;
+}
+
+string solution(string new_id) {
+    string answer = "";
+    string new_id_NoDot = RemoveDot(new_id);
+
+		for (int i = 0; i < new_id.size(); i++)
+		new_id[i] = tolower(new_id[i]);
+
+	for (int i = 0; i < new_id.size(); i++)
+	{
+		char ch = new_id[i];
+
+		if (ch >= 'a'&&ch <= 'z')
+			answer += ch;
+
+		else if (ch >= '0' && ch <= '9')
+			answer += ch;
+		
+		else if (ch == '-' || ch == '_' || ch == '.')
+			answer += ch;
+	}
+
+	string ans = RemoveDot(answer);
+	if (ans[0] == '.')
+		ans.erase(ans.begin());
+	if (ans[ans.size() - 1] == '.')
+		ans.erase(ans.end() - 1);
+
+	if (ans.size() == 0)
+		ans = "aaa";
+
+	if (ans.size() <= 2)
+	{
+		char ch = ans[ans.size() - 1];
+		while (ans.size() != 3)
+			ans += ch;
+	}
+
+	answer = "";
+	if (ans.size() >= 16)
+	{
+		for (int i = 0; i < 15; i++)
+		{
+			answer += ans[i];
+		}
+		ans = RemoveDot(answer);
+	}
+	if (ans[ans.size() - 1] == '.')
+		ans.erase(ans.end() - 1);
+
+	answer = ans;
+    
+    return answer;
+}
