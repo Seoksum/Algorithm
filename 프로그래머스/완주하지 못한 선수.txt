@@ -1,0 +1,35 @@
+#include <string>
+#include <vector>
+#include <map>
+
+using namespace std;
+
+string solution(vector<string> participant, vector<string> completion) {
+    string answer;
+    
+    map<string, int> part;
+	for (int i = 0; i < participant.size(); i++)
+	{
+		string name = participant[i];
+
+		if (part[name] >= 1)
+			part[name]++;
+		else
+			part[name] = 1;
+	}
+
+	for (int i = 0; i < completion.size(); i++)
+	{
+		string name = completion[i];
+        
+		if (part[name] == 1)
+			part.erase(name);
+
+		else if(part[name]>=2)
+			part[name]--;
+	}
+    
+    answer = part.begin()->first;
+    
+    return answer;
+}
