@@ -1,0 +1,60 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+string solution(vector<int> numbers, string hand) {
+    string answer = "";
+    
+    int nowLeft = 10;
+	int nowRight = 12;
+
+	for (int i = 0; i < numbers.size(); i++)
+	{
+		int num = numbers[i];
+		if (num == 1 || num == 4 || num == 7)
+		{
+			answer += "L";
+			nowLeft = num;
+		}
+		else if (num == 3 || num == 6 || num == 9)
+		{
+			answer += "R";
+			nowRight = num;
+		}
+		else
+		{
+			if (num == 0)
+				num = 11;
+
+			int nowRightcol = abs((nowRight - 1) / 3 - (num - 1) / 3) + abs((nowRight-1) % 3 - (num-1) % 3);
+			int nowLeftcol = abs((nowLeft - 1) / 3 - (num - 1) / 3) + abs((nowLeft - 1) % 3 - (num - 1) % 3);
+			
+			if (nowRightcol == nowLeftcol)
+			{
+				if (hand == "right")
+				{
+					answer += "R";
+					nowRight = num;
+				}
+				else
+				{
+					answer += "L";
+					nowLeft = num;
+				}
+			}
+			else if (nowRightcol < nowLeftcol)
+			{
+				answer += "R";
+				nowRight = num;
+			}
+			else
+			{
+				answer += "L";
+				nowLeft = num;
+			}
+		}
+	}
+    
+    return answer;
+}
