@@ -1,0 +1,40 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <string>
+#include <sstream>
+#include <set>
+
+using namespace std;
+
+vector<int> solution(vector<string> id_list, vector<string> report, int k) {
+    
+    map<string, int> mapping;
+	map<string, set<string>> t_report;
+	vector<int> answer=vector<int>(id_list.size(),0); 
+
+	for (int i = 0; i < id_list.size(); i++)
+		mapping[id_list[i]] = i;
+
+	for (int i = 0; i < report.size(); i++)
+	{
+		string str = report[i];
+		stringstream ss(str);
+		string reportingID, reportedID;
+		ss >> reportingID >> reportedID;
+		t_report[reportedID].insert(reportingID);
+	}
+
+	for (auto r : t_report)
+	{
+		if (r.second.size() >= k)
+		{
+			for (auto ID : r.second)
+			{
+				answer[mapping[ID]]++;
+			}
+		}
+	}
+		
+    return answer;
+}
