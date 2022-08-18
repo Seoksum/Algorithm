@@ -1,0 +1,60 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+
+using namespace std;
+
+map<string, int> m;
+
+bool cmp(pair<string, int>& a, pair<string, int>& b)
+{
+	return a.second > b.second;
+}
+
+void Comb(string order, int cnt)
+{
+	vector<bool> visited(order.size(), false);
+	for (int i = order.size() - cnt; i < order.size(); i++)
+		visited[i] = true;
+
+    sort(order.begin(), order.end());
+	do
+	{
+		string str = "";
+		for (int i = 0; i < order.size(); i++)
+			if (visited[i])
+				str += order[i];
+		m[str]++;
+	} while (next_permutation(visited.begin(), visited.end()));
+}
+
+vector<string> solution(vector<string> orders, vector<int> course) {
+	vector<string> answer;
+
+	for (int i = 0; i < orders.size(); i++)
+		for (int j = 0; j < course.size(); j++)
+			Comb(orders[i], course[j]);
+	
+	vector<pair<string, int>> v;
+	for (auto _m : m)
+		v.push_back(make_pair(_m.first, _m.second));
+	
+	sort(v.begin(), v.end(), cmp);
+
+	for (int i = 0; i < course.size(); i++)
+	{
+		int maxCount = 2;
+		for(auto menu : v)
+		{
+			if (menu.first.size() == course[i] && menu.second >= maxCount)
+			{
+				answer.push_back(menu.first);
+				maxCount = menu.second;
+			}
+		}
+	}
+
+	sort(answer.begin(), answer.end());
+	return answer;
+}

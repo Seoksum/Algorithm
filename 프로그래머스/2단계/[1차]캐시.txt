@@ -1,0 +1,50 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+
+string ChangeWord(string& word)
+{
+    for(int i=0;i<word.size();i++)
+        word[i] = toupper(word[i]);
+    return word;
+}
+
+int solution(int cacheSize, vector<string> cities) {
+    int answer = 0;
+    if(cacheSize==0)
+        return cities.size()*5;
+    
+    vector<string> cache(cacheSize,"");
+    
+    int idx=0;
+    for(int i=0;i<cities.size();i++)
+    {
+        bool find = false;
+        string city = ChangeWord(cities[i]);
+        
+        for(int j=0;j<cacheSize;j++)
+        {
+            if(cache[j]==city)
+            {
+                find = true;
+                cache.erase(cache.begin()+j);
+                cache.push_back(city);
+                break;
+            }
+        }
+        if(find)
+        {
+            answer+=1;
+        }
+        else
+        {
+            cache.erase(cache.begin());
+            cache.push_back(city);
+            answer+=5;
+        }   
+    }   
+    return answer;
+}
