@@ -1,0 +1,82 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <stack>
+
+using namespace std;
+
+char alpha[6] = { 'A','B','C','D','E','F' };
+stack<char> StrNum(int num, int n)
+{
+    stack<char> tmp;
+    if (num == 0)
+        tmp.push('0');
+
+    while (num > 0)
+    {
+        int r = num % n;
+        tmp.push(r+'0');
+        num /= n;
+    }
+    return tmp;
+}
+
+stack<char> HexNum(int num, int n)
+{
+    stack<char> tmp;
+    if (num == 0)
+        tmp.push('0');
+
+    while (num > 0)
+    {
+        int r = num % n;
+        if (r >= 10)
+            tmp.push(alpha[r-10]);
+        else
+            tmp.push(r + '0');
+
+        num /= n;
+    }
+    return tmp;
+}
+
+string solution(int n, int t, int m, int p) {
+    string answer = "";
+    
+    int cnt = 0;
+    int startNum = 0;
+    int turn = 1;
+    while (cnt < t)
+    {
+        stack<char> s;
+        if(n<10)
+            s = StrNum(startNum++, n);
+        else
+            s = HexNum(startNum++, n);
+        
+        string str = "";
+        while (!s.empty())
+        {
+            str += s.top();
+            s.pop();
+        }
+        for (int i = 0; i < str.size(); i++)
+        {
+            // 내 차례인가
+            if (turn == p)
+            {
+                cnt++;
+                answer += str[i];
+                if (cnt == t)
+                    break;
+            }
+            turn++;
+            // 차례가 인원보다 많아지면 다시 1로 
+            if (turn > m)
+                turn = 1;
+
+        }
+    }
+
+    return answer;
+}
