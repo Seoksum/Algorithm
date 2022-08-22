@@ -1,0 +1,58 @@
+#include <string>
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+unordered_map<int, string> word;
+
+vector<int> solution(string msg) {
+    vector<int> answer;
+
+    for (int i = 1; i <= 26; i++)
+        word[i] = i + 64;
+
+    int startIdx = 27; string str = "";
+    
+    for (int i = 0; i < msg.size();i++)
+    {
+        str += msg[i];
+        string tmp;
+        for (int j = i + 1; j < msg.size(); j++)
+        {
+            bool IsFind = false;
+            tmp = str + msg[j];
+            for (auto w : word)
+            {
+                if (w.second == tmp)
+                {
+                    IsFind = true;
+                    break;
+                }
+            }
+
+            if (IsFind)
+            {
+                i++;
+                str += msg[j];
+                continue;
+            }
+            else
+            {
+                break;
+            }
+        }
+        for (auto w : word)
+        {
+            if (w.second == str)
+            {
+                answer.push_back(w.first);
+                break;
+            }
+        }
+        word[startIdx++] = tmp;
+        str = "";
+    }
+
+    return answer;
+}
