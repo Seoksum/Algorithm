@@ -1,0 +1,17 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+long long solution(int a, int b) {
+    long long answer = 0;
+    if(a==b)
+        return a;
+    int minVal = min(a,b);
+    int maxVal = max(a,b);
+    
+    for(int i=minVal;i<=maxVal;i++)
+        answer+=i;
+    
+    return answer;
+}
