@@ -1,0 +1,72 @@
+#include <string>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+queue<long long> InsertQueue(vector<int> v)
+{
+    queue<long long> q;
+    for(int i=0;i<v.size();i++)
+    {
+        q.push(v[i]);
+    }
+    return q;
+}
+
+long long Hap(queue<long long> q)
+{
+    long long hap = 0;
+    while(!q.empty())
+    {
+        hap+=q.front();
+        q.pop();
+    }
+    return hap;
+}
+
+long long solution(vector<int> queue1, vector<int> queue2) {
+    long long answer = 0;
+    int length = queue1.size();
+    queue<long long> q1 = InsertQueue(queue1);
+    queue<long long> q2 = InsertQueue(queue2);
+
+    long long q1_hap = Hap(q1);
+    long long q2_hap = Hap(q2);
+    
+    if((q1_hap+q2_hap)%2==1)
+        return -1;
+    
+    while(true)
+    {
+        if(q1.empty() || q2.empty())
+            return -1;
+        if (answer >= length * 3)
+            return -1;
+        
+        if(q1_hap>q2_hap)
+        {
+            int a = q1.front();
+            q2.push(a);
+            q2_hap += a;
+            q1_hap -= a;
+            q1.pop();
+            
+            answer++;
+        }
+        else if(q1_hap<q2_hap)
+        {
+            int a = q2.front();
+            q1.push(a);
+            q1_hap += a;
+            q2_hap -= a;
+            q2.pop();
+            answer++;
+        }
+        else
+            break;
+        
+    }
+    
+    return answer;
+}
