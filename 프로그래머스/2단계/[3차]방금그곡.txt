@@ -1,0 +1,90 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+vector<int> musicTimes;
+vector<string> musicNames;
+vector<string> MusicInfos;
+
+
+string MakeMelody(string& s)
+{
+    string str="";
+    while(s.size()>0)
+    {
+        if(s.substr(1,1)=="#")
+        {
+            str+=tolower(s[0]);
+            s.erase(s.begin(),s.begin()+2);
+        }
+        else
+        {
+            str+=s[0];
+            s.erase(s.begin(),s.begin()+1);        
+        }
+    }
+    return str;
+}
+
+void SetMelody(string music)
+{
+    int h = stoi(music.substr(6,2)) - stoi(music.substr(0,2));
+    int m = stoi(music.substr(9,2)) - stoi(music.substr(3,2));
+    int times = h*60 + m;
+    
+    bool flag = true;
+    string name=""; string info="";
+    for(int i=12;i<music.size();i++)
+    {
+        if(music[i]==',')
+        {
+            flag = false;
+            continue;
+        }
+        if(flag)
+            name+=music[i];
+        else
+            info+=music[i];
+    }
+    musicTimes.push_back(times);
+    musicNames.push_back(name);
+    MusicInfos.push_back(info);
+}
+
+string solution(string m, vector<string> musicinfos) {
+    string answer = "(None)";
+    
+    for(int i=0;i<musicinfos.size();i++)
+        SetMelody(musicinfos[i]);
+    
+    string mm = MakeMelody(m);
+    int maxTime = 0;
+    
+    for(int i=0;i<musicinfos.size();i++)
+    {
+        int times = musicTimes[i];
+        string melody = MakeMelody(MusicInfos[i]);
+        
+        string str="";
+        if(times <= melody.size())
+            str = melody.substr(0,times);
+        else
+        {
+            for(int j=0;j<times/melody.size();j++)
+                str+=melody;
+            for(int j=0;j<times%melody.size();j++)
+                str+=melody[j];
+        }
+        if(str.find(mm) != string::npos)
+        {
+            if(maxTime < times)
+            {
+                answer = musicNames[i];
+                maxTime = times;
+            }
+        }
+        
+    }
+    
+    return answer;
+}
