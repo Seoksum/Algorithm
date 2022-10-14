@@ -1,0 +1,44 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+
+
+using namespace std;
+
+vector<vector<int>> cache;
+vector<int> element;
+
+int DP(int pos,int N)
+{
+	pos %= element.size();
+	if (N == 0)
+		return 0;
+
+	int& ret = cache[pos][N];
+	if (ret != -1)
+		return ret;
+
+	return ret = element[pos] + DP(pos+1, N - 1);
+}
+
+int solution(vector<int> elements) {
+	int answer = 0;
+
+	int N = elements.size();
+	element = elements;
+	cache = vector<vector<int>>(N + 1,vector<int>(N+1, -1));
+	
+	map<int, int> msum;
+	for (int i = 1; i <= N; i++)
+	{
+		for (int j = 0; j < elements.size(); j++)
+		{
+			int r = DP(j, i);
+			msum[r]++;
+		}
+	}
+
+	answer = msum.size();
+	return answer;
+}
